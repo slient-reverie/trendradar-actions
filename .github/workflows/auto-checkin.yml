@@ -1,0 +1,20 @@
+name: Auto Check In
+
+on:
+  schedule:
+    # 每周日 01:00 UTC = 北京时间 09:00，重置 7 天试用计时
+    - cron: "0 1 * * 0"
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  checkin:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch Check In workflow
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run clean-crawler.yml --repo "${{ github.repository }}" --ref main
